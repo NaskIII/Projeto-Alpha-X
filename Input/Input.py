@@ -1,3 +1,5 @@
+from robots import Text_Robots
+
 def start():
     def inputTermo():
         print()
@@ -15,9 +17,12 @@ def start():
         escolha = int(input('>>'))
         return prefixos[escolha-1]
 
+    robots = Text_Robots
     content = []
     content.append(inputTermo())
     content.append(inputPrefixo())
+    robots.TextRobots(content)
+
     print(content)
 
 start()
