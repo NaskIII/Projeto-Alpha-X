@@ -8,7 +8,7 @@ def start():
         return termo
 
     def inputPrefixo():
-        prefixos = ['Quem e', 'O que e', 'A historia', 'Sair']
+        prefixos = ['Quem e', 'O que e', 'historia', 'Sair']
         print ('Escolha um:')
         for index, item in enumerate(prefixos):
             print(index + 1, item)
@@ -21,8 +21,8 @@ def start():
     content = []
     content.append(inputTermo())
     content.append(inputPrefixo())
-    robots.TextRobots(content)
+    rob = robots.TextRobots(content)
+    rob.wiki()
 
-    print(content)
 
 start()
