@@ -1,4 +1,4 @@
-from robots import Text_Robots, Write
+from robots import Text_Robots, Write, Resumir
 
 
 def start():
@@ -9,7 +9,7 @@ def start():
         return termo
 
     def inputPrefixo():
-        prefixos = ['Quem e', 'O que e', 'A historia', 'Exit']
+        prefixos = ['Quem e', 'O que e', 'A historia', 'Exit', '']
         print ('Escolha um:')
         for index, item in enumerate(prefixos):
             print(index + 1, item)
@@ -26,7 +26,9 @@ def start():
     def call():  # Chamada dos Robos
         rob = robots.TextRobots(content)
         robo = Write.Write("/home/nask/Documentos/Arquivos/", rob.pularLinhas())
-        robo.atributos(rob.atributos())
+        text = robo.atributos(rob.atributos())
+        res = Resumir.Resumir(text)
+        res.arquivoResumo()
 
     call()
 

@@ -39,6 +39,7 @@ class Write(object):
         new_arq.writelines(self.referencias)
         arq.close()
         new_arq.close()
+        return texto_final
 
     def atributos(self, lista):
         self.titulo = lista['title']
@@ -46,11 +47,18 @@ class Write(object):
         self.organizar()
         self.write()
         self.countLines()
-        self.formatar()
-        return True
+        text = self.formatar()
+        return lista
 
     def organizar(self):
         self.referencias = self.referencias.replace('[', '')
         self.referencias = self.referencias.replace(']', '')
         self.referencias = self.referencias.replace("'", '')
         self.referencias = self.referencias.replace(',', '\n')
+
+    def conteudoSanitizado(self, content, resumo):
+        resumo = resumo.replace('=', '')
+        resumo = resumo.lstrip(" ")
+        arq = open(self.caminho + self.text['title'] + "_Resumido.txt", "w")
+        arq.writelines(resumo)
+        arq.close()
