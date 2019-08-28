@@ -26,8 +26,7 @@ def start():
     def call():  # Chamada dos Robos
         rob = robots.TextRobots(content)
         robo = Write.Write("/home/nask/Documentos/Arquivos/", rob.pularLinhas())
-        robo.write()
-        robo.formatar()
+        robo.atributos(rob.atributos())
 
     call()
 
