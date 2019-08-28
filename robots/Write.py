@@ -4,54 +4,53 @@ ID: Nask
 Objetivo: Escrever em um arquvo para que o mesmo seja formatado
 '''
 
+
 class Write(object):
     def __init__(self, caminho, text):
-        self._caminho = caminho
-        self._text = text
-
-    @property
-    def caminho(self):
-        return self._caminho
-
-    @caminho.setter
-    def caminho(self, caminho):
-        self._caminho = caminho
-
-    @property
-    def text(self):
-        return self._text
-
-    @text.setter
-    def text(self, text):
-        self._text = text
+        self.caminho = caminho
+        self.text = text
+        self.titulo = None
+        self.referencias = None
 
     def write(self):
-        new_arq = open(self.caminho + "Arquivo.txt", "w")
+        new_arq = open(self.caminho + self.titulo + ".txt", "w")
         new_arq.writelines(self.text)
         new_arq.close()
 
+    def countLines(self):
+        arq = open(self.caminho + self.titulo + ".txt", "r")
+        return len(arq.readlines())
+
     def formatar(self):
-        arq = open(self.caminho + "Arquivo.txt", "r")
-        linhas = len(arq.readlines())
-        arq.close()
-        print(linhas)
-        numero = 0
         texto_final = ""
-        arq = open(self.caminho + "Arquivo.txt", "r")
-        while numero <= linhas:
-            numero += 1
-            if numero != 1:
-                texto = str(arq.readline())
-                texto = texto.lstrip(" ")
-                if texto != ' Ver também ':
-                    texto_final += texto
-                else:
-                    print('Teste')
-                    numero = linhas + 10
-            else:
-                texto = str(arq.readline())
-                texto_final += texto
-        new_arq = open(self.caminho + "Arquivo_Formatado.txt", 'w')
+        arq = open(self.caminho + self.titulo + ".txt", "r")
+
+        for linhas in range(self.countLines()):
+            texto = str(arq.readline())
+            texto = texto.lstrip(" ")
+            texto_final += texto
+
+        texto_final = texto_final.replace("Referências ", '')
+        new_arq = open(self.caminho + self.titulo + ".txt", 'w')
         new_arq.writelines(texto_final)
+        new_arq.writelines("\n")
+        new_arq.writelines("\n")
+        new_arq.writelines("Referências:\n")
+        new_arq.writelines(self.referencias)
         arq.close()
         new_arq.close()
+
+    def atributos(self, lista):
+        self.titulo = lista['title']
+        self.referencias = str(lista['references'])
+        self.organizar()
+        self.write()
+        self.countLines()
+        self.formatar()
+        return True
+
+    def organizar(self):
+        self.referencias = self.referencias.replace('[', '')
+        self.referencias = self.referencias.replace(']', '')
+        self.referencias = self.referencias.replace("'", '')
+        self.referencias = self.referencias.replace(',', '\n')

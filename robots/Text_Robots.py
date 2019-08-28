@@ -7,7 +7,7 @@ class TextRobots(object):
         self.text = None
 
     def wiki(self):
-        print("\n"*2)
+        print("\n" * 2)
 
         input = {
             "articleName": self.content[1] + " " + self.content[0],
@@ -24,4 +24,8 @@ class TextRobots(object):
         self.text = self.wiki()
         saida = str(self.text['content'])
         saida = saida.replace('=', '')
+
         return saida
+
+    def atributos(self):
+        return self.text
