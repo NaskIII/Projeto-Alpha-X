@@ -17,8 +17,8 @@ class TextRobots(object):
         client = Algorithmia.client('simyw+zYbXC1hUyLm4AVdUorUMD1')
         algo = client.algo('web/WikipediaParser/0.1.2')
         algo.set_options(timeout=300)
-        text = algo.pipe(input).result
-        return text
+        content = algo.pipe(input).result
+        return content
 
     def pularLinhas(self):
         self.text = self.wiki()
