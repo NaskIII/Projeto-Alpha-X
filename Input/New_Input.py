@@ -1,4 +1,4 @@
-from robots import Text_Robots, Write, Resumir
+from robots import New_Text_Robots
 
 
 def start():
@@ -18,19 +18,13 @@ def start():
         escolha = int(input('>> '))
         return prefixos[escolha-1]
 
-    robots = Text_Robots
-    content = []
-    content.append(inputTermo())
-    content.append(inputPrefixo())
+    artigo = {
+        'termo': inputTermo(),
+        'prefixo': inputPrefixo()
+    }
 
-    def call():  # Chamada dos Robos
-        rob = robots.TextRobots(content)
-        robo = Write.Write("/home/nask/Documentos/Arquivos/", rob.pularLinhas())
-        text = robo.atributos(rob.atributos())
-        res = Resumir.Resumir(text)
-        res.arquivoResumo()
+    def call():
+        robotText = New_Text_Robots.TextRobots(artigo, '/home/nask/Documentos/Arquivos/').resumir()
 
     call()
-
-
 start()
