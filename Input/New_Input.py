@@ -27,7 +27,7 @@ def start():
     }
 
     def call():  # Metodo responsavel por chamar todos os robos
-        robotText = New_Text_Robots.TextRobots(artigo).chamadas()  # Construtor com chamada do metodo
+        New_Text_Robots.TextRobots(artigo).chamadas()  # Construtor com chamada do metodo
 
     call()
 
