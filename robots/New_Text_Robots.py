@@ -27,12 +27,14 @@ FLUXO DE CHAMADAS DOS METODOS!!!
 '''
 
 import Algorithmia  # API usada para buscar e resumir o conteudo da wikipedia
+import sys
+from robots import Diretorios
 
 
 class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de texto
-    def __init__(self, artigo, caminho):
+    def __init__(self, artigo):
         self.artigo = artigo
-        self.caminho = caminho
+        self.caminho = None
         self.content = None
 
     def wiki(self):  # Metodo usado para pegar o conteudo
@@ -44,16 +46,23 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         client = Algorithmia.client('simyw+zYbXC1hUyLm4AVdUorUMD1')  # Faço minha autenticaçao na API
         algo = client.algo('web/WikipediaParser/0.1.2')  # Utilizo o algoritmo que manipula o conteudo do Wikipedia
         algo.set_options(timeout=300)  # Defino um tempo maximo de resposta, opcional
-        content = algo.pipe(input).result  # O Algoritmo me retorna uma Dict contendo o conteudo, link das imagens, titulo, links em geral e referencias
-        return content
+
+        try:
+            content = algo.pipe(input).result  # O Algoritmo me retorna uma Dict contendo o conteudo, link das imagens, titulo, links em geral e referencias
+            dire = Diretorios.start(self.artigo)
+            self.caminho = dire
+            return content
+        except:
+            print('O conteudo informado nao foi encontrado, por favor busque com outras palavras.')
+            sys.exit()
+
 
     def cleanSentences(self, texto):  # Retiro as sentencas de marcaçao utilizado no Wikipedia
         texto = texto.replace('=', '')
         texto = texto.replace('Referências', '')
         return  texto
 
-    def write(self):  # Escrevo o conteudo em um arquivo .txt para poder formatar linha por linha
-        content = self.wiki()
+    def write(self, content):  # Escrevo o conteudo em um arquivo .txt para poder formatar linha por linha
         self.content = content
         texto = self.cleanSentences(self.content['content'])
         new_arq = open(self.caminho + self.content['title'] + '.txt', 'w')
@@ -62,7 +71,6 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         return content
 
     def contLines(self):  # Itero o arquivo para poder saber o numero de linhas
-        self.write()
         arq = open(self.caminho + self.content['title'] + '.txt', 'r')
         linhas = len(arq.readlines())
         arq.close()
@@ -98,8 +106,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         texto_final = texto_final.replace('\n', '\n\n')
         return texto_final
 
-    def resumir(self):  # Metodo utilizado para resumir uma string
-        texto = self.formatarTexto()  # Recupero o texto formatado
+    def resumir(self, texto):  # Metodo utilizado para resumir uma string
 
         input = texto, 50  # Variavel utilizada para dar entrada no algoritmo
         client = Algorithmia.client('simyw+zYbXC1hUyLm4AVdUorUMD1')  # Faço minha autenticaçao na API
@@ -109,4 +116,10 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
 
         arquivo = open(self.caminho + self.content['title'] + '_Resumido.txt', 'w')  # Gero um novo arquivo para o novo conteudo
         arquivo.writelines(resumo)  # Escrevo o mesmo em um novo arquivo
-        arquivo.close()  # FIM
+        arquivo.close()  # Fecha o Arquivo
+
+    def chamadas(self):
+        content = self.wiki()
+        self.write(content)
+        texto = self.formatarTexto()
+        self.resumir(texto)
