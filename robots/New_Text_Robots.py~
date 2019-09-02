@@ -92,10 +92,9 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         arq = open(self.caminho + self.content['title'] + '.txt', 'r')
 
         for i in range(linhas):
-            texto = str(arq.readline())
-            if texto != '\n':
-                texto = texto.lstrip(" ")
-                texto_final += texto
+            texto = str(arq.readline().splitlines())
+            texto = texto.lstrip(" ")
+            texto_final += texto
 
         texto_final.replace('Referências', '')
         arq.close()
@@ -103,8 +102,8 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         new_arq.writelines(texto_final)
         new_arq.writelines('\n')
         new_arq.writelines('\n')
-        new_arq.writelines('Referências:\n')
-        new_arq.writelines(self.formatarReferencias())
+        # new_arq.writelines('Referências:\n')
+        # new_arq.writelines(self.formatarReferencias())
         new_arq.close()
         texto_final = texto_final.replace('\n', '\n\n')
         return texto_final
@@ -129,4 +128,4 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         self.word()
 
     def word(self):
-        Word.Docx(self.caminho + self.content['title'] + '.txt', self.caminho, self.content).chamadas()
+        Word.Docx(self.caminho + self.content['title'] + '.txt', self.content).chamadas()

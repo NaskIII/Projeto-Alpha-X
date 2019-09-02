@@ -1,7 +1,4 @@
 from robots import New_Text_Robots  # Importo o robo responsavel pelo texto
-import platform
-import os
-import os.path
 
 
 def start():
