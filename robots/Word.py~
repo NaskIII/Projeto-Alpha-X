@@ -1,0 +1,54 @@
+'''
+Autor: Raphael Nascimento
+ID: Nask
+Objetivo: Pegar o Texto formatado de um .txt e reescreve-lo no formato docx
+'''
+
+
+import docx
+
+
+class Docx(object):
+    def __init__(self, caminho, content):
+        self.caminho = caminho
+        self.content = content
+        self.lista = []
+
+    def contLines(self):  # Itero o arquivo para poder saber o numero de linhas
+        arq = open(self.caminho , 'r')
+        linhas = len(arq.readlines())
+        arq.close()
+        return linhas
+
+    def read(self):
+        arquivo = open(self.caminho, 'r')
+        linhas = self.contLines()
+
+        for i in range(linhas):
+            self.lista.append(str(arquivo.readline()))
+        arquivo.close()
+
+    def docx(self):
+        documento = docx.Document()
+        style = documento.styles['Normal']
+        font = style.font
+        font.name = 'Arimo'
+        font.size = docx.shared.Pt(15)
+        documento.add_heading(self.content['title'], 0)
+
+        p = documento.add_paragraph(self.lista[0])
+
+        for i in self.lista:
+            if len(i) <= 20:
+                documento.add_heading(i, level=1)
+            elif len(i) <= 30:
+                documento.add_heading(i, level=2)
+            else:
+                documento.add_paragraph(i)
+
+        documento.save(self.content['title'] + '.docx')
+
+    def chamadas(self):
+        self.read()
+        self.docx()
+

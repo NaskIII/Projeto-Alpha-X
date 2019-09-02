@@ -9,7 +9,7 @@ import platform  # Modulo usado para identificar o SO
 import os.path  # Modulo usado para manipular os caminhos
 
 
-def start(artigo):  # Metodo que recebe uma dict, usado para nomar as pastas
+def start(artigo):  # Metodo que recebe uma dict, usado para nomear as pastas
 
     def diretorios():  # Metodo qye criara os diretorios
         so = platform.system()
