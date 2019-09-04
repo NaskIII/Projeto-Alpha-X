@@ -1,10 +1,14 @@
-from robots import New_Text_Robots  # Importo o robo responsavel pelo texto
+import robots.New_Text_Robots # Importo o robo responsavel pelo texto
+import sys
 
 
 def start():
     def inputTermo():  # Aqui eu pego um termo para ser pesquisado
         print()
         termo = input('Digite um termo para o Wikipedia: ')
+        if termo == 'exit' or termo == 'sair':
+            print('Finalizando')
+            sys.exit()
         print()
         return termo
 
@@ -16,6 +20,9 @@ def start():
 
         print()
         escolha = int(input('>>> '))
+        if escolha == 4:
+            print('Finalizando')
+            sys.exit()
         return prefixos[escolha - 1]  # Retorno como subtraçao pois somei logo acima
 
     artigo = {  # Dict que e passada como parametro para o robo de texto
@@ -24,7 +31,7 @@ def start():
     }
 
     def call():  # Metodo responsavel por chamar todos os robos
-        New_Text_Robots.TextRobots(artigo).chamadas()  # Construtor com chamada do metodo
+        robots.New_Text_Robots.TextRobots(artigo).chamadas()  # Construtor com chamada do metodo
 
     call()
 

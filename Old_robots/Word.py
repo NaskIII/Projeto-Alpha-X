@@ -4,7 +4,6 @@ ID: Nask
 Objetivo: Pegar o Texto formatado de um .txt e reescreve-lo no formato docx
 '''
 
-
 import docx
 
 
@@ -16,7 +15,7 @@ class Docx(object):
         self.lista = []
 
     def contLines(self):  # Itero o arquivo para poder saber o numero de linhas
-        arq = open(self.caminho , 'r')
+        arq = open(self.caminho, 'r')
         linhas = len(arq.readlines())
         arq.close()
         return linhas
@@ -38,8 +37,6 @@ class Docx(object):
 
         documento.add_heading(self.content['title'], 0)
 
-        documento.add_paragraph(self.lista[0])
-
         for i in self.lista:
             if 7 >= len(i) > 0:
                 documento.add_heading(i, level=0)
@@ -47,7 +44,7 @@ class Docx(object):
                 documento.add_heading(i, level=1)
             elif 20 >= len(i) > 0:
                 documento.add_heading(i, level=2)
-            elif 30 >= len(i) > 0:
+            elif 35 >= len(i) > 0:
                 documento.add_heading(i, level=3)
             else:
                 documento.add_paragraph(i)
@@ -56,4 +53,3 @@ class Docx(object):
     def chamadas(self):
         self.read()
         self.docx()
-

@@ -10,13 +10,13 @@ def start():
 
     def inputPrefixo():
         prefixos = ['Quem e', 'O que e', 'A historia', 'Exit', '']
-        print ('Escolha um:')
+        print('Escolha um:')
         for index, item in enumerate(prefixos):
             print(index + 1, item)
 
         print()
         escolha = int(input('>> '))
-        return prefixos[escolha-1]
+        return prefixos[escolha - 1]
 
     robots = Text_Robots
     content = []
