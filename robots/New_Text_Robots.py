@@ -4,9 +4,7 @@ ID: Nask
 Objetivo: Buscar termos na Wikipedia e retornar os resultados em formato .txt, alem de
 gerar um resumo do conteudo original. No final serao gerados 2 arquivos, um contendo o conteudo do Wikipedia
 e o outro o resumo.
-'''
 
-'''
 FLUXO DE CHAMADAS DOS METODOS!!!
     1 - self.resumir()
     2 - self.formatarTexto()
