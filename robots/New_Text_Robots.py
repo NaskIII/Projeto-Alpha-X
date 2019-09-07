@@ -4,9 +4,7 @@ ID: Nask
 Objetivo: Buscar termos na Wikipedia e retornar os resultados em formato .txt, alem de
 gerar um resumo do conteudo original. No final serao gerados 2 arquivos, um contendo o conteudo do Wikipedia
 e o outro o resumo.
-'''
 
-'''
 FLUXO DE CHAMADAS DOS METODOS!!!
     1 - self.resumir()
     2 - self.formatarTexto()
@@ -23,7 +21,7 @@ FLUXO DE CHAMADAS DOS METODOS!!!
     4 - contLines()
     5 - self.formatarTexto()
     6 - self.formatarReferencias()
-    7 - self.resumir
+    7 - self.resumir()
 '''
 
 import sys
@@ -68,7 +66,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
     def write(self, content):  # Escrevo o conteudo em um arquivo .txt para poder formatar linha por linha
         self.content = content
         texto = self.cleanSentences(self.content['content'])
-        new_arq = open(self.caminho + self.content['title'] + '.txt', 'w')
+        new_arq = open(self.caminho + self.content['title'] + '.txt', 'w')       
         new_arq.writelines(texto)
         new_arq.close()
         return content
