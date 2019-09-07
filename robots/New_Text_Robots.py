@@ -21,7 +21,7 @@ FLUXO DE CHAMADAS DOS METODOS!!!
     4 - contLines()
     5 - self.formatarTexto()
     6 - self.formatarReferencias()
-    7 - self.resumir
+    7 - self.resumir()
 '''
 
 import sys
