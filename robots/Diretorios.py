@@ -19,9 +19,9 @@ def start(artigo):  # Metodo que recebe uma dict, usado para nomear as pastas
             dir = os.path.expanduser('~/Documentos/Arquivos/' + artigo['termo'] + '/')  # Pego o caminho completo para ser retornado ao robo de texto
             return dir
         elif so == 'Windows':
-            dir = os.path.expanduser('~/Documentos')
-            os.makedirs(dir + 'WikiDocs/' + artigo['termo'] + '/', exist_ok=True)
-            dir = os.path.expanduser('/Documentos/Arquivos/' + artigo['termo'] + '/')
+            dir = os.path.expanduser('~\\OneDrive\\Documentos\\')
+            os.makedirs(dir + 'Arquivos\\' + artigo['termo'] + '\\', exist_ok=True)
+            dir = os.path.expanduser('~\\OneDrive\\Documentos\Arquivos\\' + artigo['termo'] + '\\')
             return dir
         else:
             print('Sistema operacional não identificado')

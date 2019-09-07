@@ -68,7 +68,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
     def write(self, content):  # Escrevo o conteudo em um arquivo .txt para poder formatar linha por linha
         self.content = content
         texto = self.cleanSentences(self.content['content'])
-        new_arq = open(self.caminho + self.content['title'] + '.txt', 'w')
+        new_arq = open(self.caminho + self.content['title'] + '.txt', 'w')       
         new_arq.writelines(texto)
         new_arq.close()
         return content

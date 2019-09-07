@@ -34,6 +34,6 @@ def start():
         robots.New_Text_Robots.TextRobots(artigo).chamadas()  # Construtor com chamada do metodo
 
     call()
-
+    print('\nFinalizando...')
 
 start()
