@@ -1,5 +1,8 @@
-import robots.New_Text_Robots # Importo o robo responsavel pelo texto
 import sys
+import os
+dir = os.path.dirname(os.path.realpath(__file__ ))
+sys.path.append(dir)
+import robots.New_Text_Robots # Importo o robo responsavel pelo texto
 
 
 def start():
