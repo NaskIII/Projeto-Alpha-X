@@ -1,3 +1,11 @@
+print ('''
+========================WikiText========================
+Versão: 1.1
+Autor: Raphael Nascimento
+ID: Nask!
+Notas: Para sair digite 'exit' ou selecione a opção 4.
+''')
+
 import sys
 import os
 dir = os.path.dirname(os.path.realpath(__file__ ))
