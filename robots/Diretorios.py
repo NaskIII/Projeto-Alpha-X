@@ -15,13 +15,13 @@ def start(artigo):  # Metodo que recebe uma dict, usado para nomear as pastas
         so = platform.system()
         if so == 'Linux':
             dir = os.path.expanduser('~/Documentos/')  # Pego o caminho ate a pasta Documentos
-            os.makedirs(dir + 'Arquivos/' + artigo['termo'] + '/', exist_ok=True)  # Crio a pasta Arquivos e outra com o titulo da busca, se existir nao me retorna nenhum exeçao
-            dir = os.path.expanduser('~/Documentos/Arquivos/' + artigo['termo'] + '/')  # Pego o caminho completo para ser retornado ao robo de texto
+            os.makedirs(dir + 'Arquivos/' + artigo+ '/', exist_ok=True)  # Crio a pasta Arquivos e outra com o titulo da busca, se existir nao me retorna nenhum exeçao
+            dir = os.path.expanduser('~/Documentos/Arquivos/' + artigo + '/')  # Pego o caminho completo para ser retornado ao robo de texto
             return dir
         elif so == 'Windows':
             dir = os.path.expanduser('~\\OneDrive\\Documentos\\')
-            os.makedirs(dir + 'Arquivos\\' + artigo['termo'] + '\\', exist_ok=True)
-            dir = os.path.expanduser('~\\OneDrive\\Documentos\Arquivos\\' + artigo['termo'] + '\\')
+            os.makedirs(dir + 'Arquivos\\' + artigo + '\\', exist_ok=True)
+            dir = os.path.expanduser('~\\OneDrive\\Documentos\Arquivos\\' + artigo + '\\')
             return dir
         else:
             print('Sistema operacional não identificado')

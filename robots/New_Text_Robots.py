@@ -27,8 +27,10 @@ FLUXO DE CHAMADAS DOS METODOS!!!
 import sys
 import Algorithmia  # API usada para buscar e resumir o conteudo da wikipedia
 from robots import Diretorios
+from robots import Wikipedia
 import docx
 import os
+from docx.shared import Length
 
 
 class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de texto
@@ -37,21 +39,12 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         self.caminho = None
         self.content = None
         self.lista = []
+        self.wikipedia = Wikipedia.Wikipedia(self.artigo)
 
     def wiki(self):  # Metodo usado para pegar o conteudo
-        input = {
-            "articleName": self.artigo['prefixo'] + " " + self.artigo['termo'],  # Aqui passamos os termos e os prefixos
-            "lang": "PT"  # Aqui definimos a linguagem
-        }
-
-        client = Algorithmia.client('simyw+zYbXC1hUyLm4AVdUorUMD1')  # Faço minha autenticaçao na API
-        algo = client.algo('web/WikipediaParser/0.1.2')  # Utilizo o algoritmo que manipula o conteudo do Wikipedia
-        algo.set_options(timeout=300)  # Defino um tempo maximo de resposta, opcional
-
+        content = self.wikipedia.content()
         try:
-            content = algo.pipe(
-                input).result  # O Algoritmo me retorna uma Dict contendo o conteudo, link das imagens, titulo, links em geral e referencias
-            dire = Diretorios.start(self.artigo)
+            dire = Diretorios.start(self.artigo['termo'])
             self.caminho = dire
             return content
         except:
@@ -59,26 +52,25 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
             sys.exit()
 
     def cleanSentences(self, texto):  # Retiro as sentencas de marcaçao utilizado no Wikipedia
-        texto = texto.replace('=', '')
         texto = texto.replace('Referências', '')
         return texto
 
     def write(self, content):  # Escrevo o conteudo em um arquivo .txt para poder formatar linha por linha
         self.content = content
-        texto = self.cleanSentences(self.content['content'])
-        new_arq = open(self.caminho + self.content['title'] + '.txt', 'w')       
+        texto = self.cleanSentences(self.content)
+        new_arq = open(self.caminho + self.wikipedia.title() + '.txt', 'w')
         new_arq.writelines(texto)
         new_arq.close()
         return content
 
     def contLines(self):  # Itero o arquivo para poder saber o numero de linhas
-        arq = open(self.caminho + self.content['title'] + '.txt', 'r')
+        arq = open(self.caminho + self.wikipedia.title() + '.txt', 'r')
         linhas = len(arq.readlines())
         arq.close()
         return linhas
 
     def formatarReferencias(self):  # Retiro as marcaçoes que estao nas referencias
-        referencias = str(self.content['references'])
+        referencias = str(self.wikipedia.references())
         referencias = referencias.replace('[', '')
         referencias = referencias.replace(']', '')
         referencias = referencias.replace("'", '')
@@ -88,7 +80,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
     def formatarTexto(self):  # Formato o texto para ser reescrito no .txt
         linhas = self.contLines()
         texto_final = ""
-        arq = open(self.caminho + self.content['title'] + '.txt', 'r')
+        arq = open(self.caminho + self.wikipedia.title() + '.txt', 'r')
 
         for i in range(linhas):
             texto = str(arq.readline())
@@ -98,7 +90,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
 
         texto_final.replace('Referências', '')
         arq.close()
-        new_arq = open(self.caminho + self.content['title'] + '.txt', 'w')
+        new_arq = open(self.caminho + self.wikipedia.title() + '.txt', 'w')
         new_arq.writelines(texto_final)
         new_arq.writelines('\n')
         new_arq.writelines('\n')
@@ -116,7 +108,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         algo.set_options(timeout=300)  # Defino um tempo maximo de resposta, opcional
         resumo = algo.pipe(input).result  # Recupero o texto resumido
 
-        arquivo = open(self.caminho + self.content['title'] + '_Resumido.txt',
+        arquivo = open(self.caminho + self.wikipedia.title() + '_Resumido.txt',
                        'w')  # Gero um novo arquivo para o novo conteudo
         arquivo.writelines(resumo)  # Escrevo o mesmo em um novo arquivo
         arquivo.close()  # Fecha o Arquivo
@@ -130,7 +122,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         self.docx()
 
     def read(self):  # Irá ler o txt novamente e colocar o conteudo dentro de uma lista
-        arquivo = open(self.caminho + self.content['title'] + '.txt', 'r')
+        arquivo = open(self.caminho + self.wikipedia.title() + '.txt', 'r')
         linhas = self.contLines()
 
         for i in range(linhas):
@@ -142,25 +134,40 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         style = documento.styles['Normal']  # Defino o estilo para normal
         font = style.font  # Chamo a classe fonte
         font.name = 'Arial'  # Mudo a fonte para Arial
-        font.size = docx.shared.Pt(11)  # Mudo o tamanho da fonte
+        font.size = docx.shared.Pt(13)  # Mudo o tamanho da fonte
+        paragrafo = documento.add_paragraph()
+        formato_paragrafo = paragrafo.paragraph_format
+        formato_paragrafo.line_spacing = 2
 
-        documento.add_heading(self.content['title'], 0)  # Adiciono um título principal na primeira página
+        documento.add_heading(self.wikipedia.title(), 0)  # Adiciono um título principal na primeira página
 
         for i in self.lista:  # Itero a lista para escrever no docx
-            if 7 >= len(i) > 0:  # Se o conteúdo do índice da lista, for menor que 7, adiciona um título maior
-                documento.add_heading(i, level=0)  
-            elif 10 >= len(i) > 0:  # Se o conteúdo do índice da lista, for menor que 10, adiciona um título maior
+            if i.__contains__('==') and len(i) <= 7:  # Se o conteúdo do índice da lista, for menor que 7, adiciona um título maior
+                i = i.replace('=', '')
+                i = i.lstrip(' ')
+                documento.add_heading(i, level=0)
+            elif i.__contains__('==') and len(i) <= 10:  # Se o conteúdo do índice da lista, for menor que 10, adiciona um título maior
+                i = i.replace('=', '')
+                i = i.lstrip(' ')
                 documento.add_heading(i, level=1)  
-            elif 20 >= len(i) > 0:  # Se o conteúdo do índice da lista, for menor que 20, adiciona um título maior
+            elif i.__contains__('==') and len(i) <= 20:  # Se o conteúdo do índice da lista, for menor que 20, adiciona um título maior
+                i = i.replace('=', '')
+                i = i.lstrip(' ')
                 documento.add_heading(i, level=2)
-            elif 35 >= len(i) > 0:  # Se o conteúdo do índice da lista, for menor que 35, adiciona um título maior
+            elif i.__contains__('==') and len(i) <= 35:  # Se o conteúdo do índice da lista, for menor que 35, adiciona um título maior
+                i = i.replace('=', '')
+                i = i.lstrip(' ')
+                documento.add_heading(i, level=3)
+            elif i.__contains__('==') and len(i) > 35:
+                i = i.replace('=', '')
+                i = i.lstrip(' ')
                 documento.add_heading(i, level=3)
             else:  # Se nenhuma for verdadeira, adiciona apenas um parágrafo 
                 documento.add_paragraph(i)
 
-        documento.save(self.caminho + '/' + self.content['title'] + '.docx')  # Salvo o documento
+        documento.save(self.caminho + '/' + self.wikipedia.title() + '.docx')  # Salvo o documento
         self.apagar() 
 
 
     def apagar(self):  # Apago o txt com o mesmo conteúdo do docx
-        os.remove(self.caminho + self.content['title'] + '.txt')
+        os.remove(self.caminho + self.wikipedia.title() + '.txt')
