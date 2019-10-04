@@ -1,6 +1,6 @@
 print ('''
 ========================WikiText========================
-Versão: 1.1
+Versão: 1.2
 Autor: Raphael Nascimento
 ID: Nask!
 Notas: Para sair digite 'exit' ou selecione a opção 4.
