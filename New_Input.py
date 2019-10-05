@@ -1,11 +1,4 @@
-print ('''
-========================WikiText========================
-Versão: 1.2
-Autor: Raphael Nascimento
-ID: Nask!
-Notas: Para sair digite 'exit' ou selecione a opção 4.
-''')
-
+import platform
 import sys
 import os
 dir = os.path.dirname(os.path.realpath(__file__ ))
@@ -14,6 +7,27 @@ import robots.New_Text_Robots # Importo o robo responsavel pelo texto
 
 
 def start():
+    def clear():
+        so = platform.system()
+        
+        if so == 'Windows':
+            os.system('cls')
+        elif so == 'Linux':
+            os.system('clear')
+        else:
+            print('Sistema operacional não suportado')
+            sys.exit()
+            
+    clear()
+    
+    print ('''
+========================WikiText========================
+Versão: 1.2.1
+Autor: Raphael Nascimento
+ID: Nask!
+Notas: Para sair digite 'exit' ou selecione a opção 4.
+''')
+            
     def inputTermo():  # Aqui eu pego um termo para ser pesquisado
         print()
         termo = input('Digite um termo para o Wikipedia: ')

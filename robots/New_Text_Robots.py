@@ -58,13 +58,14 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
     def write(self, content):  # Escrevo o conteudo em um arquivo .txt para poder formatar linha por linha
         self.content = content
         texto = self.cleanSentences(self.content)
-        new_arq = open(self.caminho + self.wikipedia.title() + '.txt', 'w')
+        new_arq = open(self.caminho + self.wikipedia.title() + '.txt', 'w', encoding='utf-8')
         new_arq.writelines(texto)
         new_arq.close()
         return content
+        
 
     def contLines(self):  # Itero o arquivo para poder saber o numero de linhas
-        arq = open(self.caminho + self.wikipedia.title() + '.txt', 'r')
+        arq = open(self.caminho + self.wikipedia.title() + '.txt', 'r', encoding='utf-8')
         linhas = len(arq.readlines())
         arq.close()
         return linhas
@@ -80,7 +81,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
     def formatarTexto(self):  # Formato o texto para ser reescrito no .txt
         linhas = self.contLines()
         texto_final = ""
-        arq = open(self.caminho + self.wikipedia.title() + '.txt', 'r')
+        arq = open(self.caminho + self.wikipedia.title() + '.txt', 'r', encoding='utf-8')
 
         for i in range(linhas):
             texto = str(arq.readline())
@@ -90,7 +91,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
 
         texto_final.replace('Referências', '')
         arq.close()
-        new_arq = open(self.caminho + self.wikipedia.title() + '.txt', 'w')
+        new_arq = open(self.caminho + self.wikipedia.title() + '.txt', 'w', encoding='utf-8')
         new_arq.writelines(texto_final)
         new_arq.writelines('\n')
         new_arq.writelines('\n')
@@ -109,7 +110,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         resumo = algo.pipe(input).result  # Recupero o texto resumido
 
         arquivo = open(self.caminho + self.wikipedia.title() + '_Resumido.txt',
-                       'w')  # Gero um novo arquivo para o novo conteudo
+                       'w', encoding='utf-8')  # Gero um novo arquivo para o novo conteudo
         arquivo.writelines(resumo)  # Escrevo o mesmo em um novo arquivo
         arquivo.close()  # Fecha o Arquivo
 
@@ -122,7 +123,7 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         self.docx()
 
     def read(self):  # Irá ler o txt novamente e colocar o conteudo dentro de uma lista
-        arquivo = open(self.caminho + self.wikipedia.title() + '.txt', 'r')
+        arquivo = open(self.caminho + self.wikipedia.title() + '.txt', 'r', encoding='utf-8')
         linhas = self.contLines()
 
         for i in range(linhas):
