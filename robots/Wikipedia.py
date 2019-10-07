@@ -15,7 +15,10 @@ class Wikipedia(object):
         return self.pesquisa.title
 
     def content(self):
-        return self.pesquisa.content
+        try:
+            return self.pesquisa.content
+        except wikipedia.exceptions.PageError:
+            print('O conteúdo informado não foi encontrado, tente buscar com outras palavras!')
 
     def references(self):
         return self.pesquisa.references
