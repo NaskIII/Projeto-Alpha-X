@@ -28,9 +28,9 @@ import sys
 import Algorithmia  # API usada para buscar e resumir o conteudo da wikipedia
 from robots import Diretorios
 from robots import Wikipedia
-import docx
+from robots import Docx
 import os
-from docx.shared import Length
+
 
 
 class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de texto
@@ -114,14 +114,6 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         arquivo.writelines(resumo)  # Escrevo o mesmo em um novo arquivo
         arquivo.close()  # Fecha o Arquivo
 
-    def chamadas(self):  # Metodo que vai chamar os outros metodos da classe
-        content = self.wiki()
-        self.write(content)
-        texto = self.formatarTexto()
-        self.resumir(texto)
-        self.read()
-        self.docx()
-
     def read(self):  # Irá ler o txt novamente e colocar o conteudo dentro de uma lista
         arquivo = open(self.caminho + self.wikipedia.title() + '.txt', 'r', encoding='utf-8')
         linhas = self.contLines()
@@ -130,45 +122,14 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
             self.lista.append(str(arquivo.readline()))
         arquivo.close()
 
-    def docx(self):  # Método que irá criar um .docx 
-        documento = docx.Document()  # Chamo a classe
-        style = documento.styles['Normal']  # Defino o estilo para normal
-        font = style.font  # Chamo a classe fonte
-        font.name = 'Arial'  # Mudo a fonte para Arial
-        font.size = docx.shared.Pt(13)  # Mudo o tamanho da fonte
-        paragrafo = documento.add_paragraph()
-        formato_paragrafo = paragrafo.paragraph_format
-        formato_paragrafo.line_spacing = 2
-
-        documento.add_heading(self.wikipedia.title(), 0)  # Adiciono um título principal na primeira página
-
-        for i in self.lista:  # Itero a lista para escrever no docx
-            if i.__contains__('==') and len(i) <= 7:  # Se o conteúdo do índice da lista, for menor que 7, adiciona um título maior
-                i = i.replace('=', '')
-                i = i.lstrip(' ')
-                documento.add_heading(i, level=0)
-            elif i.__contains__('==') and len(i) <= 10:  # Se o conteúdo do índice da lista, for menor que 10, adiciona um título maior
-                i = i.replace('=', '')
-                i = i.lstrip(' ')
-                documento.add_heading(i, level=1)  
-            elif i.__contains__('==') and len(i) <= 20:  # Se o conteúdo do índice da lista, for menor que 20, adiciona um título maior
-                i = i.replace('=', '')
-                i = i.lstrip(' ')
-                documento.add_heading(i, level=2)
-            elif i.__contains__('==') and len(i) <= 35:  # Se o conteúdo do índice da lista, for menor que 35, adiciona um título maior
-                i = i.replace('=', '')
-                i = i.lstrip(' ')
-                documento.add_heading(i, level=3)
-            elif i.__contains__('==') and len(i) > 35:
-                i = i.replace('=', '')
-                i = i.lstrip(' ')
-                documento.add_heading(i, level=3)
-            else:  # Se nenhuma for verdadeira, adiciona apenas um parágrafo 
-                documento.add_paragraph(i)
-
-        documento.save(self.caminho + '/' + self.wikipedia.title() + '.docx')  # Salvo o documento
-        self.apagar() 
-
-
     def apagar(self):  # Apago o txt com o mesmo conteúdo do docx
         os.remove(self.caminho + self.wikipedia.title() + '.txt')
+
+    def chamadas(self):  # Metodo que vai chamar os outros metodos da classe
+        content = self.wiki()
+        self.write(content)
+        texto = self.formatarTexto()
+        self.resumir(texto)
+        self.read()
+        Docx.Docx().docx(self.lista, self.caminho, self.wikipedia.title())
+        self.apagar()
