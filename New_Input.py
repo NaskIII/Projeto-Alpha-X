@@ -22,7 +22,7 @@ def start():
     
     print ('''
 ========================WikiText========================
-Versão: 1.2.1
+Versão: 1.3
 Autor: Raphael Nascimento
 ID: Nask!
 Notas: Para sair digite 'exit' ou selecione a opção 4.
@@ -38,7 +38,7 @@ Notas: Para sair digite 'exit' ou selecione a opção 4.
         return termo
 
     def inputPrefixo():  # Aqui recebo um prefixo, pois a maquina so sabe o termo, nao o objetivo dele
-        prefixos = ['Quem e', 'O que e', 'A historia', 'Exit', '']
+        prefixos = ['Quem é', 'O que é', 'A história', 'Exit', '']
         print('Escolha um:')
         for index, item in enumerate(prefixos):  # Itero minha lista para enumerar
             print(index + 1, item)  # Escrevo o conteudo com uma soma para nao aparecer o valor 0
