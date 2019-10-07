@@ -29,6 +29,7 @@ import Algorithmia  # API usada para buscar e resumir o conteudo da wikipedia
 from robots import Diretorios
 from robots import Wikipedia
 from robots import Docx
+from robots import PDF
 import os
 
 
@@ -131,5 +132,6 @@ class TextRobots(object):  # Classe responsavel por gerar todo o conteudo de tex
         texto = self.formatarTexto()
         self.resumir(texto)
         self.read()
-        Docx.Docx().docx(self.lista, self.caminho, self.wikipedia.title())
+        caminhoDocx = Docx.Docx().docx(self.lista, self.caminho, self.wikipedia.title())
+        PDF.PDF.pdf(caminhoDocx)
         self.apagar()

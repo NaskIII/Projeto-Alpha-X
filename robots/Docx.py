@@ -40,4 +40,7 @@ class Docx(object):
             else:  # Se nenhuma for verdadeira, adiciona apenas um parágrafo
                 documento.add_paragraph(i)
 
-        documento.save(caminho + '/' + title + '.docx')  # Salvo o documento
+        save = caminho + '/' + title + '.docx'
+        documento.save(save)  # Salvo o documento
+
+        return save
