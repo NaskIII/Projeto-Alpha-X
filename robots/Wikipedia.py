@@ -1,12 +1,11 @@
+import sys
 import wikipedia
 
 
 class Wikipedia(object):
     def __init__(self, artigo):
-        self.termo = artigo['termo']
-        self.prefixo = artigo['prefixo']
         wikipedia.set_lang('PT')
-        self.pesquisa = wikipedia.page(self.prefixo + ' ' + self.termo)
+        self.pesquisa = wikipedia.page(artigo)
 
     def url(self):
         return self.pesquisa.url
@@ -19,6 +18,7 @@ class Wikipedia(object):
             return self.pesquisa.content
         except wikipedia.exceptions.PageError:
             print('O conteúdo informado não foi encontrado, tente buscar com outras palavras!')
+            sys.exit()
 
     def references(self):
         return self.pesquisa.references
