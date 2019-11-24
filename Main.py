@@ -5,7 +5,7 @@ dir = os.path.dirname(os.path.realpath(__file__ ))
 sys.path.append(dir)
 from robots import Wikipedia
 from robots import Diretorios
-from robots import New_Text_Robots
+from robots import Text_Robots
 from robots import Docx
 
 if __name__ == '__main__':
@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     print('''
     ========================WikiText========================
-    Versão: 1.3
+    Versão: 1.4
     Autor: Raphael Nascimento
     ID: Nask!
     Notas: Para sair digite 'exit' ou selecione a opção 4.
@@ -36,12 +36,27 @@ if __name__ == '__main__':
         sys.exit()
     print()
 
+    wiki = Wikipedia.Wikipedia(termo)
+    if wiki.searchs() is True:
+        possibleSearchs = wiki.search()
+
+        print('Escolha um item para ser pesquisado:')
+        for index, item in enumerate(possibleSearchs):  # Itero minha lista para enumerar
+            print(index + 1, item)  # Escrevo o conteudo com uma soma para nao aparecer o valor 0
+
+        choice = input('>> ')
+        if choice == '!EXIT' or choice == '!SAIR':
+            print('FINISH')
+            sys.exit()
+        else:
+            termo = possibleSearchs[int(choice) - 1]
+            wiki.page(termo)
+
     dire = Diretorios.start(termo)
 
-    wiki = Wikipedia.Wikipedia(termo)
     content = wiki.content()
 
-    robot = New_Text_Robots.TextRobots()
+    robot = Text_Robots.TextRobots()
     robot.write(content, dire + wiki.title())
     texto = robot.formatarTexto(dire + wiki.title(), wiki.references())
     robot.resumir(texto, dire + wiki.title())
